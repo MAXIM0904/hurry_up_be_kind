@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+
+<body>
+    {% if object_list %}
+        {% for profil in object_list %}
+            {{profil.name}}
+        {% endfor %}
+    {% else %}
+        Записей нет.
+    {% endif %}
+</body>
+</html>
