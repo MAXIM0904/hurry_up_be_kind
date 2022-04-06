@@ -17,10 +17,10 @@ class Philantropist(models.Model):
 class Ward(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя подопечного')
     surname = models.CharField(max_length=100, verbose_name='Фамилия подопечного')
-    size_donations = models.IntegerField(default=0, verbose_name='Размер пожертвований')
     about_me_ward = models.TextField(verbose_name="О себе")
     phone = PhoneNumberField()
     registrarion_date_ward = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
+    address_ward = models.TextField(default='Не заполнено', verbose_name='Адрес проживания')
 
     def __str__(self):
         return self.surname
