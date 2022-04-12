@@ -4,9 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from all_users.models import Ward, Philantropist
-from .managers import UserManager
 from .forms import SignupForm
-from rest_framework import authentication
 
 
 class UserInfToken(APIView):
@@ -20,6 +18,9 @@ class UserInfToken(APIView):
 
 
 class RegistrationUser(APIView):
+
+    '''класс регитсрации пользователя'''
+
     def post(self, request):
         form = SignupForm(request.POST)
 
@@ -54,4 +55,3 @@ class RegistrationUser(APIView):
 
         else:
             return Response(form.errors)
-
