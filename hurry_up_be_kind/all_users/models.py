@@ -1,26 +1,24 @@
 from django.db import models
+from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
-
 class Philantropist(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Имя пользователя')
-    surname = models.CharField(max_length=100, verbose_name='Фамилия пользователя')
+    user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_philantropist')
     about_me_philantropist = models.TextField(verbose_name="О себе")
     size_donations = models.IntegerField(default=0, verbose_name='Размер пожертвований')
-    phone = PhoneNumberField()
+    phone = models.CharField(max_length=12, verbose_name="Номер телефона")
     registrarion_date_philantropist = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
 
     def __str__(self):
-        return self.surname
+        return str(self.user_profile)
 
 
 class Ward(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Имя подопечного')
-    surname = models.CharField(max_length=100, verbose_name='Фамилия подопечного')
+    user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_ward')
     about_me_ward = models.TextField(verbose_name="О себе")
-    phone = PhoneNumberField()
+    phone = models.CharField(max_length=12, verbose_name="Номер телефона")
     registrarion_date_ward = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
-    address_ward = models.TextField(default='Не заполнено', verbose_name='Адрес проживания')
+    address_ward = models.TextField(default='', verbose_name='Адрес проживания')
 
     def __str__(self):
-        return self.surname
+        return str(self.user_profile)

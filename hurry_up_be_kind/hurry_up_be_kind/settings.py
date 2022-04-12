@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'phonenumber_field',
     'api_exchange',
     'all_users',
+    'loging'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +80,12 @@ TEMPLATES = [
 #     ]
 # }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
 
 WSGI_APPLICATION = 'hurry_up_be_kind.wsgi.application'
 

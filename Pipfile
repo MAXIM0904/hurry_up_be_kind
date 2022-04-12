@@ -9,6 +9,7 @@ djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+djoser = "*"
 
 [dev-packages]
 
