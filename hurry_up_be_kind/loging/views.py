@@ -36,43 +36,42 @@ class RegistrationUser(APIView):
 
 
     def post(self, request):
-        print('1')
-
         serializer_form = RegistrationSerializer(data=request.data)
         serializer_form.is_valid(raise_exception=True)
-        print(dir(serializer_form))
-        print(serializer_form.validated_data)
-        print(request.data)
-        print('2')
+        phone_number = serializer_form.validated_data['phone_number']
+        if User.objects.filter(username=phone_number):
+            return Response({'error': 'A user with such a phone already exists.'})
 
-        if form.is_valid():
-            phone = str(form.cleaned_data['phone'])
-            if User.objects.filter(username=phone):
-                return Response({'error': 'A user with such a phone already exists.'})
-            instance = form.save(commit=False)
-            instance.username = form.cleaned_data['phone']
-            instance.save()
-            status = form.cleaned_data['status']
-            phone = form.cleaned_data['phone']
+        user = User.objects.create_user(
+            username=phone_number,
+            first_name=serializer_form.validated_data['first_name'],
+            last_name=serializer_form.validated_data['last_name'],
+            password=serializer_form.validated_data['password'],
+        )
 
-            if status == 'подопечный':
-                Ward.objects.create(
-                    user_profile = instance,
-                    phone = phone
-                )
+        status = serializer_form.validated_data['status'].lower()
 
-            elif status == 'участник':
-                Philantropist.object.create(
-                    user_profile = instance,
-                    phone = phone
-                )
+        if status == 'подопечный':
+            Ward.objects.create(
+                user_profile=user,
+                phone=phone_number,
+            )
 
-            token = Token.objects.create(user=instance)
-            return Response({
-                'token': token.key,
-                'user_status': status,
-                'username': phone
-            })
+
+            #
+            # elif status == 'участник':
+            #     Philantropist.object.create(
+            #         user_profile = instance,
+            #         phone = phone
+            #     )
+            #
+            # token = Token.objects.create(user=instance)
+            # return Response({
+            #     'token': token.key,
+            #     'user_status': status,
+            #     'username': phone
+            # })
+            return Response(True)
 
         else:
             return Response(form.errors)
