@@ -1,10 +1,12 @@
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from all_users.models import Ward, Philantropist
-from .forms import SignupForm
+from .serializers import RegistrationSerializer
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
 class UserInfToken(APIView):
@@ -18,11 +20,30 @@ class UserInfToken(APIView):
 
 
 class RegistrationUser(APIView):
+    '''класс региcтрации пользователя'''
+    permission_classes = (AllowAny,)
 
-    '''класс регитсрации пользователя'''
+
+    def get(self, request, format=None):
+
+        print('1')
+        print(request.GET)
+        context = {
+            'user': request.user,
+            'auth': request.auth
+        }
+        return Response(context)
+
 
     def post(self, request):
-        form = SignupForm(request.POST)
+        print('1')
+
+        serializer_form = RegistrationSerializer(data=request.data)
+        serializer_form.is_valid(raise_exception=True)
+        print(dir(serializer_form))
+        print(serializer_form.validated_data)
+        print(request.data)
+        print('2')
 
         if form.is_valid():
             phone = str(form.cleaned_data['phone'])

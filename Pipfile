@@ -8,7 +8,7 @@ django = "==4.0.3"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
-django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
 djoser = "*"
 
 [dev-packages]

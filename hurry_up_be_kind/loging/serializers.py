@@ -1,9 +1,15 @@
 from rest_framework import serializers
-from all_users.models import Philantropist
+from django.contrib.auth.models import User
 
 
-class SerializerPhilantropist(serializers.ModelSerializer):
-    status = models.CharField(max_length=100, verbose_name='Имя пользователя')
+class RegistrationSerializer(serializers.ModelSerializer):
+    ''' Сериализация регистрации нового пользователя '''
+
+    password1 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    password2 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    status = serializers.CharField(max_length=100)
+    phone_number = serializers.CharField(max_length=25, min_length=8, write_only=True)
+
     class Meta:
-        model = Philantropist
-        fields = ('name', 'phone',)
+        model = User
+        fields = ('first_name', 'last_name', 'phone_number', 'password1', 'password2', 'status')
