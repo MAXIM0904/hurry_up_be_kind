@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Philantropist(models.Model):
     user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_philantropist')
