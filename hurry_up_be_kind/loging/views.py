@@ -57,21 +57,15 @@ class RegistrationUser(APIView):
                 phone=phone_number,
             )
 
-
-            #
-            # elif status == 'участник':
-            #     Philantropist.object.create(
-            #         user_profile = instance,
-            #         phone = phone
-            #     )
-            #
-            # token = Token.objects.create(user=instance)
-            # return Response({
-            #     'token': token.key,
-            #     'user_status': status,
-            #     'username': phone
-            # })
-            return Response(True)
-
-        else:
-            return Response(form.errors)
+        elif status == 'участник':
+            Philantropist.object.create(
+                user_profile = instance,
+                phone = phone
+            )
+        token = Token.objects.create(user=instance)
+        return Response({
+            'token': token.key,
+            'user_status': status,
+            'username': phone
+        })
+        return Response(True)
