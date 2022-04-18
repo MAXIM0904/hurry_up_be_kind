@@ -25,6 +25,7 @@ class UserInfToken(APIView):
                 'phone': user_inf_ptofile.phone,
                 'about_me_philantropist': user_inf_ptofile.about_me_philantropist,
                 'size_donations': user_inf_ptofile.size_donations,
+                'status': 'участник'
             })
 
         except:
@@ -36,6 +37,7 @@ class UserInfToken(APIView):
             'first_name': user_inf.first_name,
             'phone': user_inf_ptofile.phone,
             'about_me_ward': user_inf_ptofile.about_me_ward,
+            'status': 'подопечный'
         })
 
 
