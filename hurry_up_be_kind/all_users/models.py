@@ -6,7 +6,7 @@ class Philantropist(models.Model):
     user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_philantropist')
     about_me_philantropist = models.TextField(verbose_name="О себе")
     size_donations = models.IntegerField(default=0, verbose_name='Размер пожертвований')
-    phone = models.CharField(max_length=12, verbose_name="Номер телефона")
+    phone = models.CharField(max_length=20, verbose_name="Номер телефона")
     registrarion_date_philantropist = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Philantropist(models.Model):
 class Ward(models.Model):
     user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_ward')
     about_me_ward = models.TextField(verbose_name="О себе")
-    phone = models.CharField(max_length=12, verbose_name="Номер телефона")
+    phone = models.CharField(max_length=20, verbose_name="Номер телефона")
     registrarion_date_ward = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
     address_ward = models.TextField(default='', verbose_name='Адрес проживания')
 

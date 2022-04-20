@@ -85,6 +85,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated'
+    )
 }
 
 WSGI_APPLICATION = 'hurry_up_be_kind.wsgi.application'

@@ -1,4 +1,7 @@
+from django.contrib.auth import logout
+from django.http import JsonResponse
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,33 +15,30 @@ class UserInfToken(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request):
-        print(request.user)
-        print(request.user.id)
         user_inf = User.objects.get(username=request.user)
 
         try:
             user_inf_ptofile = Philantropist.objects.get(user_profile_id=request.user.id)
-            return Response({
-                'username': user_inf.username,
-                'last_name': user_inf.last_name,
-                'first_name': user_inf.first_name,
-                'phone': user_inf_ptofile.phone,
-                'about_me_philantropist': user_inf_ptofile.about_me_philantropist,
-                'size_donations': user_inf_ptofile.size_donations,
-                'status': 'участник'
-            })
+            context = {'username': user_inf.username,
+                       'last_name': user_inf.last_name,
+                       'first_name': user_inf.first_name,
+                       'phone': user_inf_ptofile.phone,
+                       'about_me_philantropist': user_inf_ptofile.about_me_philantropist,
+                       'size_donations': user_inf_ptofile.size_donations,
+                       'status': 'участник'
+                       }
 
         except:
             user_inf_ptofile = Ward.objects.get(user_profile_id=request.user.id)
+            context = {'username': user_inf.username,
+                       'last_name': user_inf.last_name,
+                       'first_name': user_inf.first_name,
+                       'phone': user_inf_ptofile.phone,
+                       'about_me_ward': user_inf_ptofile.about_me_ward,
+                       'status': 'подопечный'
+                       }
 
-        return Response({
-            'username': user_inf.username,
-            'last_name': user_inf.last_name,
-            'first_name': user_inf.first_name,
-            'phone': user_inf_ptofile.phone,
-            'about_me_ward': user_inf_ptofile.about_me_ward,
-            'status': 'подопечный'
-        })
+        return JsonResponse(context)
 
 
 class RegistrationUser(APIView):
@@ -65,6 +65,7 @@ class RegistrationUser(APIView):
             Ward.objects.create(
                 user_profile=user,
                 phone=phone_number,
+                status=status
             )
 
         elif status == 'участник':
@@ -74,8 +75,19 @@ class RegistrationUser(APIView):
             )
 
         token = Token.objects.create(user=user)
-        return Response({
+        return JsonResponse({
             'token': token.key,
-            'user_status': status,
-            'username': phone_number,
         })
+
+class Loging(ObtainAuthToken):
+    permission_classes = (AllowAny,)
+
+
+class Logout(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request):
+        print(request.auth)
+        token = Token.objects.get(key=request.auth)
+        token.delete()
+        return JsonResponse({'status': 'status 200'})
