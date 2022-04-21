@@ -59,18 +59,21 @@ class RegistrationUser(APIView):
 
         status = serializer_form.validated_data['status'].lower()
 
-        if status == 'подопечный':
-            Ward.objects.create(
-                user_profile=user,
-                phone=phone_number,
-                status=status
-            )
+        try:
+            if status == 'подопечный':
+                Ward.objects.create(
+                    user_profile=user,
+                    phone=phone_number,
+                )
 
-        elif status == 'участник':
-            Philantropist.objects.create(
-                user_profile = user,
-                phone = phone_number,
-            )
+            elif status == 'участник':
+                Philantropist.objects.create(
+                    user_profile = user,
+                    phone = phone_number,
+                )
+        except Exception as err:
+            user.delete()
+            return JsonResponse({'error' : str(err)})
 
         token = Token.objects.create(user=user)
         return JsonResponse({
@@ -133,5 +136,3 @@ class UserDelete(APIView):
         user_profile = User.objects.get(id=request.user.id)
         user_profile.delete()
         return JsonResponse({'status': 'status 200'})
-
-
