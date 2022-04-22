@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Philantropist(models.Model):
+    avatar_user_img = models.ImageField(upload_to='avatar_philantropist/', verbose_name='Аватар профиля', null=True, blank=True)
     user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_philantropist')
     about_me_philantropist = models.TextField(verbose_name="О себе", blank=True)
     size_donations = models.IntegerField(default=0, verbose_name='Размер пожертвований')
@@ -14,6 +15,7 @@ class Philantropist(models.Model):
 
 
 class Ward(models.Model):
+    avatar_user_img = models.ImageField(upload_to='avatar_ward/', verbose_name='Аватар профиля', null=True, blank=True)
     user_profile = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name='profile_ward')
     about_me_ward = models.TextField(verbose_name="О себе", blank=True)
     phone = models.CharField(max_length=20, verbose_name="Номер телефона", blank=True)

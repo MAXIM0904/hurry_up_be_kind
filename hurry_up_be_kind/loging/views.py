@@ -24,6 +24,7 @@ class UserInfToken(APIView):
                        'phone': user_inf_profile.phone,
                        'about_me_philantropist': user_inf_profile.about_me_philantropist,
                        'size_donations': user_inf_profile.size_donations,
+                       'avatar_user_img': f'/images/{str(user_inf_profile.avatar_user_img)}',
                        'status': 'участник'
                        }
 
@@ -34,6 +35,7 @@ class UserInfToken(APIView):
                        'first_name': user_inf.first_name,
                        'phone': user_inf_profile.phone,
                        'about_me_ward': user_inf_profile.about_me_ward,
+                       'avatar_user_img': f'/images/{str(user_inf_profile.avatar_user_img)}',
                        'status': 'подопечный'
                        }
         return JsonResponse(context)
@@ -64,12 +66,14 @@ class RegistrationUser(APIView):
                 Ward.objects.create(
                     user_profile=user,
                     phone=phone_number,
+                    avatar_user_img=serializer_form.validated_data['avatar_user_img']
                 )
 
             elif status == 'участник':
                 Philantropist.objects.create(
                     user_profile = user,
                     phone = phone_number,
+                    avatar_user_img=serializer_form.validated_data['avatar_user_img']
                 )
         except Exception as err:
             user.delete()
@@ -101,21 +105,24 @@ class UserUpdateProfile(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def patch(self, request, *args, **kwargs):
-        user_form = UserUpdateSerializer(request.user, request.POST)
+        user_form = UserUpdateSerializer(request.user, request.data)
         user_form.is_valid(raise_exception=True)
 
         if Ward.objects.filter(user_profile_id=request.user.id):
-            ward_profile = Ward.objects.get(user_profile_id=request.user.id)
-            user_update_profile = WardUpdateSerializer(ward_profile, request.POST)
+            user_profile = Ward.objects.get(user_profile_id=request.user.id)
+            user_update_profile = WardUpdateSerializer(user_profile, request.data)
 
         elif Philantropist.objects.filter(user_profile_id=request.user.id):
-            philantropist_profile = Philantropist.objects.get(user_profile_id=request.user.id)
-            user_update_profile = PhilantropistUpdateSerializer(philantropist_profile, request.POST)
+            user_profile = Philantropist.objects.get(user_profile_id=request.user.id)
+            user_update_profile = PhilantropistUpdateSerializer(user_profile, request.data)
 
         else:
             return JsonResponse({'error': 'No record detected'})
 
         user_update_profile.is_valid(raise_exception=True)
+
+        if user_update_profile.validated_data.get('avatar_user_img'):
+            user_profile.avatar_user_img.delete()
 
         if user_update_profile.validated_data.get('phone'):
             print(user_update_profile.validated_data)
