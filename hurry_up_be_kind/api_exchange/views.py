@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 class PhilantropistList(APIView):
     def get(self, request, format=None):
+        print('1')
         list_philantropist = Philantropist.objects.all()
         serializer = SerializerPhilantropist(list_philantropist, many=True)
         return Response(serializer.data)

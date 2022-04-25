@@ -77,6 +77,8 @@ class RegistrationUser(APIView):
                     user_profile = user,
                     phone = phone_number,
                 )
+            else:
+                raise ValueError("No what status")
         except Exception as err:
             user.delete()
             return JsonResponse({'error' : str(err)})
