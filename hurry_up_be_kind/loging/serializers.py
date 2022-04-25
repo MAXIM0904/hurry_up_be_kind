@@ -9,11 +9,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
     status = serializers.CharField(max_length=100)
     phone_number = serializers.CharField(max_length=25, min_length=8, write_only=True)
-    avatar_user_img = serializers.ImageField()
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'phone_number', 'password', 'status', 'avatar_user_img')
+        fields = ('first_name', 'last_name', 'phone_number', 'password', 'status')
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):

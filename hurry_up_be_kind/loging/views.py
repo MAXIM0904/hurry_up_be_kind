@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from all_users.models import Ward, Philantropist
 from .serializers import RegistrationSerializer, UserUpdateSerializer, PhilantropistUpdateSerializer, WardUpdateSerializer
+from rest_framework.response import Response
 
 
 class UserInfToken(APIView):
@@ -50,7 +51,10 @@ class RegistrationUser(APIView):
         serializer_form.is_valid(raise_exception=True)
         phone_number = serializer_form.validated_data['phone_number']
         if User.objects.filter(username=phone_number):
-            return JsonResponse({'error': 'A user with such a phone already exists.'})
+            return JsonResponse({
+                'answer': 'error',
+                'text': 'A user with such a phone already exists.'
+            })
 
         user = User.objects.create_user(
             username=phone_number,
@@ -62,18 +66,16 @@ class RegistrationUser(APIView):
         status = serializer_form.validated_data['status'].lower()
 
         try:
-            if status == 'подопечный':
+            if status == 'ward':
                 Ward.objects.create(
                     user_profile=user,
                     phone=phone_number,
-                    avatar_user_img=serializer_form.validated_data['avatar_user_img']
                 )
 
-            elif status == 'участник':
+            elif status == 'philantropist':
                 Philantropist.objects.create(
                     user_profile = user,
                     phone = phone_number,
-                    avatar_user_img=serializer_form.validated_data['avatar_user_img']
                 )
         except Exception as err:
             user.delete()
@@ -81,7 +83,8 @@ class RegistrationUser(APIView):
 
         token = Token.objects.create(user=user)
         return JsonResponse({
-            'token': token.key,
+            'answer': 'token',
+            'text': token.key,
         })
 
 
