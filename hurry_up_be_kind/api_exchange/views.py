@@ -5,12 +5,12 @@ from rest_framework.response import Response
 
 
 class PhilantropistList(APIView):
-    def get(request, format=None):
+    def get(request):
         print('1')
         print(request.data)
-        Philantropist.objects.all()
+        # Philantropist.objects.all()
         # serializer = SerializerPhilantropist(list_philantropist, many=True)
-        return Response(serializer.data)
+        return Response('serializer.data')
 
 
 class WardList(APIView):
